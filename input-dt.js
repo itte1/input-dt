@@ -683,7 +683,7 @@ export class InputDt extends HTMLElement {
     this.querySelectorAll('[input-dt]').forEach(el => {
       switch (el.type) {
         case 'text':
-          el.value = this.format(this.value)
+          el.value = this.value ? this.format(this.value) : ''
           break
         case 'datetime-local':
           el.value = this.value ? format(this.value) : null
