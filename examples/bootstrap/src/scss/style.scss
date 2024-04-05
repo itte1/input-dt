@@ -1,0 +1,10 @@
+@import 'input-dt/input-dt.css';
+@import 'bootstrap/scss/bootstrap.scss';
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+.input-dt_modal {
+  bottom: -.25rem;
+}
+.input-dt_box {
+  border-radius: var(--bs-border-radius);
+}
