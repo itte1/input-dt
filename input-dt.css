@@ -20,6 +20,7 @@
   top: 0;
 }
 .input-dt_box {
+  overflow: hidden;
 }
 .input-dt_box-date {
   position: absolute;
