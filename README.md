@@ -1,27 +1,19 @@
 # input-dt
 
-input-dt is a JavaScript library for entering datetime.
+input-dt is a library for entering datetime. You can use it without JavaScript.
 
 - A custom element
 - Automatically localized
 - Customizable
 
-# install
-
-## Node.js
-
-```bash
-npm i input-dt
-```
-
-Import js and css at entry point.
-
-```js
-import 'input-dt'
-import 'input-dt/input-dt.css'
-```
-
 # Basic usage
+
+Import js and css files in advance. This is an example of importing from a CDN.
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/input-dt@0.0.2/input-dt-min.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/input-dt@0.0.2/input-dt-min.js"></script>
+```
 
 To begin, write an `input[type="text"]` tag and enclose it in a `input-dt` tag.  You can optionally add attributes to the `input-dt` tag.
 
@@ -44,6 +36,19 @@ The picker is added as the last element of the `input-dt`.
 >
   <input type="text" name="datetime" input-dt>
 </input-dt>
+```
+
+## Import for Node.js
+
+```bash
+npm i input-dt
+```
+
+Import js and css at entry point.
+
+```js
+import 'input-dt'
+import 'input-dt/input-dt.css'
 ```
 
 ## Attributes for child elements
@@ -161,7 +166,7 @@ The Flags type has the following properties
 These properties can be used to create new custom element as follows.
 
 ```js
-import { DtPicker } from './input-dt.js'
+import { DtPicker } from 'input-dt'
 
 export class DtPickerJa extends DtPicker {
   constructor() {
