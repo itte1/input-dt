@@ -1,0 +1,39 @@
+{
+  "name": "dt-picker",
+  "version": "0.0.1",
+  "description": "dt-picker is a JavaScript library for entering datetime.",
+  "keywords": [
+    "custom element",
+    "datepicker",
+    "timepicker",
+    "datetime"
+  ],
+  "files": [
+    "LICENSE",
+    "dt-picker.js",
+    "dt-picker.css",
+    "dt-picker-min.js",
+    "dt-picker-min.css",
+    "README.md"
+  ],
+  "module": "dt-picker.js",
+  "main": "dt-picker.js",
+  "scripts": {
+    "minify:js": "terser dt-picker.js > dt-picker-min.js",
+    "minify:css": "csso dt-picker.css -o dt-picker-min.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itte1/dt-picker.git"
+  },
+  "author": "Nakamura",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/itte1/dt-picker/issues"
+  },
+  "homepage": "https://github.com/itte1/dt-picker#readme",
+  "devDependencies": {
+    "csso-cli": "^4.0.2",
+    "terser": "^5.30.3"
+  }
+}
