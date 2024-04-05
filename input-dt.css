@@ -136,6 +136,9 @@
 .input-dt_select-time {
   width: 100px;
 }
+.input-dt_select-time:not(:first-child) {
+  border-left: 1px solid grey;
+}
 .input-dt_select-time::before {
   display: block;
   position: sticky;
