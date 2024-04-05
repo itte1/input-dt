@@ -413,7 +413,6 @@ export class InputDt extends HTMLElement {
     this._minuteSelect = minuteSelect
     this._secondSelect = secondSelect
 
-    this.classList.add('input-dt')
     this._modal = h('modal',
       h('background'),
       h('box box-date',
@@ -458,6 +457,7 @@ export class InputDt extends HTMLElement {
     this.format = date => this.formatter.format(date)
   }
   connectedCallback() {
+    this.classList.add('input-dt')
     this.append(this._modal)
     this._attach()
   }
