@@ -6,6 +6,21 @@ input-dt is a JavaScript library for entering datetime.
 - Automatically localized
 - Customizable
 
+# install
+
+## Node.js
+
+```bash
+npm i input-dt
+```
+
+Import js and css at entry point.
+
+```js
+import 'input-dt'
+import 'input-dt/input-dt.css'
+```
+
 # Basic usage
 
 To begin, write an `input[type="text"]` tag and enclose it in a `input-dt` tag.  You can optionally add attributes to the `input-dt` tag.
