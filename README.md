@@ -25,7 +25,7 @@ import 'input-dt/input-dt.css'
 
 To begin, write an `input[type="text"]` tag and enclose it in a `input-dt` tag.  You can optionally add attributes to the `input-dt` tag.
 
-Next, add the `input-dt-input` attribute to the `input[type="text"]`.
+Next, add the `input-dt` attribute to the `input[type="text"]`.
 
 The picker is added as the last element of the `input-dt`.
 
@@ -42,7 +42,7 @@ The picker is added as the last element of the `input-dt`.
   unit="seconds"
   locales="hi"
 >
-  <input type="text" name="datetime" input-dt-input>
+  <input type="text" name="datetime" input-dt>
 </input-dt>
 ```
 
@@ -50,7 +50,7 @@ The picker is added as the last element of the `input-dt`.
 
 | Attribute | Description |
 | --- | --- |
-| `input-dt-input` | This attribute can be attached to `input[type="text"]` or `input[type="datetime-local"]`, which opens the picker when the focus is given. It also dispatches an input event each time any datetime is selected. |
+| `input-dt` | This attribute can be attached to `input[type="text"]` or `input[type="datetime-local"]`, which opens the picker when the focus is given. It also dispatches an input event each time any datetime is selected. |
 | `input-dt-open` | If this attribute is given, it opens the picker when the element is clicked. |
 | `input-dt-display` | If this attribute is given, each time a datetime is selected, the element's children are overwritten with text nodes representing the datetime. |
 
@@ -67,7 +67,7 @@ The `input-dt` element provides several attributes. These are default values and
 | `hours` | Options for the hour. |
 | `minutes` | Options for the minute. |
 | `seconds` | Options for the second. |
-| `format` | It is possible to change the display of `input-dt-input` or `input-dt-display`. Supported formats are in the following table. By default, it is assumed to be formatted for the locale of the web browser. |
+| `format` | It is possible to change the display of `input-dt` or `input-dt-display`. Supported formats are in the following table. By default, it is assumed to be formatted for the locale of the web browser. |
 | `unit` | Minimum unit of datetime. `day` - date picker only, or `hour`, `minute`, `second`(default). |
 | `locales` | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
 
@@ -93,7 +93,7 @@ The `input-dt` element provides several attributes. These are default values and
 
 The `input-dt` element receives an `input` event each time a date/time is selected.
 
-At the same time, input-dt also dispatches an `input` event to input elements with `input-dt-input`.
+At the same time, input-dt also dispatches an `input` event to input elements with `input-dt`.
 
 # Customize Style
 
@@ -134,7 +134,7 @@ When the input-dt element is accessed via JavaScript, several properties are ava
 | unit | string | Minimum unit of datetime. `day` - date picker only, or `hour`, `minute`, `second`(default). |
 | locales | string \| null | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
 | modal | Element | **Read-only**. A property for direct access to the elements of a modal. |
-| format | (date: Date) => string | **Write-only**. It is possible to change the display of `input-dt-input` or `input-dt-display`. If used, the format attribute becomes invalid. |
+| format | (date: Date) => string | **Write-only**. It is possible to change the display of `input-dt` or `input-dt-display`. If used, the format attribute becomes invalid. |
 | formatYear | (date: number) => string | **Write-only**. It is possible to change the text portion displaying the year and the year options. |
 | formatMonth | (date: number) => string | **Write-only**. It is possible to change the text portion displaying the month and the month options. |
 | formatWeek | (value: number) => string | **Write-only**. The display text of week headings in the calendar can be changed. |

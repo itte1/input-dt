@@ -680,7 +680,7 @@ export class InputDt extends HTMLElement {
 
   _dispatch() {
     this.dispatchEvent(new Event('input'))
-    this.querySelectorAll('[input-dt-input]').forEach(el => {
+    this.querySelectorAll('[input-dt]').forEach(el => {
       switch (el.type) {
         case 'text':
           el.value = this.format(this.value)
@@ -697,7 +697,7 @@ export class InputDt extends HTMLElement {
   }
 
   _attach() {
-    this.querySelectorAll('input[input-dt-input]:not([readonly])').forEach(el => {
+    this.querySelectorAll('input[input-dt]:not([readonly])').forEach(el => {
       el.addEventListener('focus', this.open)
     })
     this.querySelectorAll('[input-dt-open]').forEach(el => {
@@ -705,7 +705,7 @@ export class InputDt extends HTMLElement {
     })
   }
   _detach() {
-    this.querySelectorAll('[input-dt-input]').forEach(el => {
+    this.querySelectorAll('[input-dt]').forEach(el => {
       el.removeEventListener('focus', this.open)
     })
     this.querySelectorAll('[input-dt-open]').forEach(el => {
