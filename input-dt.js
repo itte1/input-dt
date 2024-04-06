@@ -36,7 +36,7 @@ function unitNumber(unitName) {
   switch(unitName) {
     case 'year': case 'years': return 1e10
     case 'month': case 'months': return 1e8
-    case 'day': case 'days': return 1e6
+    case 'day': case 'days': case 'date': return 1e6
     case 'hour': case 'hours': return 1e4
     case 'minute': case 'minutes': return 1e2
     default: return 0
@@ -201,10 +201,10 @@ class Calender {
     this.weekDays = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
   }
   set min(value) {
-    this._min = unitDateValue(value, 'date')
+    this._min = unitDateValue(value, 'day')
   }
   set max(value) {
-    this._max = unitDateValue(value, 'date')
+    this._max = unitDateValue(value, 'day')
   }
   set date(value) {
     this._selectedDateText = value ? formatDateOnly(value) : ''
@@ -233,7 +233,7 @@ class Calender {
       let date = new Date(firstDate)
       date.setDate(i + 1 - startSpaceCount)
       let dateText = formatDateOnly(date)
-      let x = unitDateValue(date, 'date')
+      let x = unitDateValue(date, 'day')
 
       let isInside = i < lastIndex
       let isOutside = i < startSpaceCount || i >= lastIndex
@@ -608,9 +608,14 @@ export class InputDt extends HTMLElement {
 
   open(year, monthIndex) {
     if (year === undefined || monthIndex === undefined) {
-      let date = this.value || new Date()
-      year = date.getFullYear()
-      monthIndex = date.getMonth()
+      if (this.value) {
+        year = this.value.getFullYear()
+        monthIndex = this.value.getMonth()
+      } else {
+        let yearMonth = Math.max(unitDateValue(this.min, 'month'), Math.min(unitDateValue(this.max, 'month'), unitDateValue(new Date(), 'month')))
+        year = Math.floor(yearMonth / 100)
+        monthIndex = yearMonth % 100
+      }
     }
     this._year = year
     this._monthIndex = monthIndex
