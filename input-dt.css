@@ -209,6 +209,7 @@
 }
 
 .input-dt_modal:not(.input-dt_active),
+.input-dt_background:not(.input-dt_active),
 .input-dt_film:not(.input-dt_active),
 .input-dt_box:not(.input-dt_active),
 .input-dt_select:not(.input-dt_active) {

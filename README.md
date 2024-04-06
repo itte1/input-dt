@@ -75,6 +75,7 @@ The `input-dt` element provides several attributes. These are default values and
 | `seconds` | Options for the second. |
 | `unit` | Minimum unit of datetime. `day` - date picker only, or `hour`, `minute`, `second`(default). |
 | `locales` | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
+| `background` | Normally, a modal is closed by clicking anywhere other than the modal. This is accomplished by receiving the `click` event of the `document`. Therefore, if there is an element that stops the propagation of events, the modal will not close. If the `background` attribute is set to `true`, a filter that closes the modal on click will cover the entire screen. |
 
 ## All supported formats
 

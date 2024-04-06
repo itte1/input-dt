@@ -432,6 +432,10 @@ export class InputDt extends HTMLElement {
       ),
     )
 
+    this._modal.addEventListener('click', event => {
+      event.stopPropagation()
+      event.preventDefault()
+    })
     find(this._modal, 'prev').addEventListener('click', () => {
       if (this._monthIndex <= 0) {
         this.open(this._year - 1, 11) 
@@ -447,29 +451,29 @@ export class InputDt extends HTMLElement {
       }
     })
     find(this._modal, 'film').addEventListener('click', () => this.open(this._year, this._monthIndex))
-    find(this._modal, 'background').addEventListener('click', event => {
-      event.preventDefault()
-      this.close()
-    })
+    find(this._modal, 'background').addEventListener('click', () => this.close())
 
     this.min = null
     this.max = null
     this.unit = 'second'
+    this.background = false
     this.format = date => this.formatter.format(date)
   }
   connectedCallback() {
     this.classList.add('input-dt')
     this.append(this._modal)
     this._attach()
+    document.addEventListener('click', this.close)
   }
 
   disconnectedCallback() {
+    document.removeEventListener('click', this.close)
     this._detach()
     this._modal.remove()
   }
 
   static get observedAttributes() {
-    return ['value', 'min', 'max', 'disable', 'hours', 'minutes', 'seconds', 'unit', 'locales']
+    return ['value', 'min', 'max', 'disable', 'hours', 'minutes', 'seconds', 'unit', 'locales', 'background']
   }
 
   attributeChangedCallback(name, _oldValue, newValue) {
@@ -493,7 +497,10 @@ export class InputDt extends HTMLElement {
       case 'unit':
       case 'locales':
         this[name] = newValue
-        break;
+        break
+      case 'background':
+        this[name] = Boolean(newValue)
+        break
     }
   }
 
@@ -577,6 +584,12 @@ export class InputDt extends HTMLElement {
   get locales() {
     return this._locales
   }
+  set background(value) {
+    this._background = value
+  }
+  get background() {
+    return this._background
+  }
 
   get modal() {
     return this._modal
@@ -638,11 +651,18 @@ export class InputDt extends HTMLElement {
 
     this._calender.open(year, monthIndex)
     this._active('modal') 
-    this._active('box-date') 
+    this._active('box-date')
+    if (this.background) {
+      this._active('background')
+    }
+    this._stopClose()
   }
 
   close() {
-    this._inactive('modal') 
+    if (!this._isStopClose) {
+      this._inactive('modal') 
+      this._inactive('background')
+    }
   }
 
   clear() {
@@ -668,6 +688,17 @@ export class InputDt extends HTMLElement {
       this._inactive('box-date')
       this._active('box-time')
     }
+  }
+
+  _stopClose() {
+    this._isStopClose = true
+    if (this._stopTimer) {
+      clearTimeout(this._stopTimer)
+    }
+    this._stopTimer = setTimeout(() => {
+      this._isStopClose = false
+      this._stopTimer = null
+    }, 500)
   }
 
   _resetFormatter() {
