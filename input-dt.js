@@ -447,7 +447,10 @@ export class InputDt extends HTMLElement {
       }
     })
     find(this._modal, 'film').addEventListener('click', () => this.open(this._year, this._monthIndex))
-    find(this._modal, 'background').addEventListener('click', () => this.close())
+    find(this._modal, 'background').addEventListener('click', event => {
+      event.preventDefault()
+      this.close()
+    })
 
     this.min = null
     this.max = null
