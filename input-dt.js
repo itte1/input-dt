@@ -343,6 +343,7 @@ export class InputDt extends HTMLElement {
     super()
     this.open = this.open.bind(this)
     this.close = this.close.bind(this)
+    this.clear = this.clear.bind(this)
 
     let yearSelect = new YearSelect()
     yearSelect.onSelect = value => {
@@ -607,6 +608,8 @@ export class InputDt extends HTMLElement {
   set renderSecond(value) { this._secondSelect.render = value }
 
   open(year, monthIndex) {
+    this._blur()
+
     if (year === undefined || monthIndex === undefined) {
       if (this.value) {
         year = this.value.getFullYear()
@@ -637,6 +640,10 @@ export class InputDt extends HTMLElement {
 
   close() {
     this._inactive('modal') 
+  }
+
+  clear() {
+    this.value = null
   }
 
   _openTime(year, monthIndex) {
@@ -691,6 +698,10 @@ export class InputDt extends HTMLElement {
     }
   }
 
+  _blur() {
+    this.querySelectorAll('input[input-dt]').forEach(el => el.blur())
+  }
+
   _dispatch() {
     this.dispatchEvent(new Event('input'))
     ;['input-dt', 'input-dt-value'].forEach(attr => {
@@ -719,6 +730,9 @@ export class InputDt extends HTMLElement {
     this.querySelectorAll('[input-dt-open]').forEach(el => {
       el.addEventListener('click', this.open)
     })
+    this.querySelectorAll('[input-dt-clear]').forEach(el => {
+      el.addEventListener('click', this.clear)
+    })
   }
   _detach() {
     this.querySelectorAll('[input-dt]').forEach(el => {
@@ -726,6 +740,9 @@ export class InputDt extends HTMLElement {
     })
     this.querySelectorAll('[input-dt-open]').forEach(el => {
       el.removeEventListener('click', this.open)
+    })
+    this.querySelectorAll('[input-dt-clear]').forEach(el => {
+      el.removeEventListener('click', this.clear)
     })
   }
 }
