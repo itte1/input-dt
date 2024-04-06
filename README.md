@@ -56,6 +56,7 @@ import 'input-dt/input-dt.css'
 | --- | --- |
 | `input-dt` | This attribute can be attached to `input[type="text"]` or `input[type="datetime-local"]`, which opens the picker when the focus is given. It also dispatches an input event each time any datetime is selected. Optionally supports formatting. Supported formats are described below. |
 | `input-dt-open` | If this attribute is given, it opens the picker when the element is clicked. |
+| `input-dt-clear` | When this attribute is given, clicking on the element clears the date/time value. |
 | `input-dt-display` | If this attribute is given, each time a datetime is selected, the element's children are overwritten with text nodes representing the datetime. Optionally supports formatting. Supported formats are described below. |
 | `input-dt-value` | When associated with an element, it updates the value of the element when a date/time is selected. Optionally supports formatting. Supported formats are described below. |
 
