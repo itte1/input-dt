@@ -143,6 +143,7 @@ When the input-dt element is accessed via JavaScript, several properties are ava
 | unit | string | Minimum unit of datetime. `day` - date picker only, or `hour`, `minute`, `second`(default). |
 | locales | string \| null | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
 | modal | Element | **Read-only**. A property for direct access to the elements of a modal. |
+| background | boolean | See the `background` attribute. |
 | format | (date: Date) => string | **Write-only**. It is possible to change the display of `input-dt` or `input-dt-display`. If used, the format attribute becomes invalid. |
 | formatYear | (date: number) => string | **Write-only**. It is possible to change the text portion displaying the year and the year options. |
 | formatMonth | (date: number) => string | **Write-only**. It is possible to change the text portion displaying the month and the month options. |
