@@ -8,7 +8,6 @@ const value = ref(null)
   <div>
     value: {{ value }}
   </div>
-
   <div>
     <input-dt v-model="value">
       <input type="text" input-dt></input>
