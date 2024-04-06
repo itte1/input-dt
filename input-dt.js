@@ -344,8 +344,6 @@ export class InputDt extends HTMLElement {
     this.open = this.open.bind(this)
     this.close = this.close.bind(this)
 
-    this._unitNumber = unitNumber('second')
-
     let yearSelect = new YearSelect()
     yearSelect.onSelect = value => {
       this.open(value, this._monthIndex)
@@ -452,8 +450,7 @@ export class InputDt extends HTMLElement {
 
     this.min = null
     this.max = null
-
-    this._resetFormatter()
+    this.unit = 'second'
     this.format = date => this.formatter.format(date)
   }
   connectedCallback() {
@@ -468,10 +465,10 @@ export class InputDt extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['value', 'min', 'max', 'disable', 'hours', 'minutes', 'seconds', 'format', 'unit', 'locales']
+    return ['value', 'min', 'max', 'disable', 'hours', 'minutes', 'seconds', 'unit', 'locales']
   }
 
-  attributeChangedCallback(name, oldValue, newValue) {
+  attributeChangedCallback(name, _oldValue, newValue) {
     switch (name) {
       case 'value':
         setTimeout(() => this[name] = newValue ? new Date(newValue) : null)
@@ -488,9 +485,6 @@ export class InputDt extends HTMLElement {
       case 'minutes':
       case 'seconds':
         this[name] = newValue ? newValue.split(',').map(value => Number(value)) : null
-        break;
-      case 'format':
-        this.format = date => format(date, newValue)
         break;
       case 'unit':
       case 'locales':
@@ -584,6 +578,12 @@ export class InputDt extends HTMLElement {
     return this._modal
   }
 
+  set format(value) {
+    if (value) {
+      this._format = value
+    }
+  }
+
   set formatYear(value) {
     this._yearSelect.format = value
     this._yearDisplay.format = value
@@ -667,6 +667,14 @@ export class InputDt extends HTMLElement {
       })
   }
 
+  _getFormattedValue(formatText) {
+    if (this.value) {
+      return formatText ? format(this.value, formatText) : this._format(this.value)
+    } else {
+      return ''
+    }
+  }
+
   _active(name) {
     addClass(find(this, name), 'active')
   }
@@ -680,19 +688,22 @@ export class InputDt extends HTMLElement {
 
   _dispatch() {
     this.dispatchEvent(new Event('input'))
-    this.querySelectorAll('[input-dt]').forEach(el => {
-      switch (el.type) {
-        case 'text':
-          el.value = this.value ? this.format(this.value) : ''
-          break
-        case 'datetime-local':
-          el.value = this.value ? format(this.value) : null
-          break
-      }
-      el.dispatchEvent(new InputEvent('input'))
+    ;['input-dt', 'input-dt-value'].forEach(attr => {
+      this.querySelectorAll(`[${attr}]`).forEach(el => {
+        let formatText = el.getAttribute(attr)
+        switch (el.type) {
+          case 'text':
+            el.value = this._getFormattedValue(formatText)
+            break
+          case 'datetime-local':
+            el.value = this._getFormattedValue(formatText) || null
+            break
+        }
+        el.dispatchEvent(new InputEvent('input'))
+      })
     })
     this.querySelectorAll('[input-dt-display]').forEach(el => {
-      replaceChildren(el, [t(this.format(this.value))])
+      replaceChildren(el, [t(this._getFormattedValue(el.getAttribute('input-dt-display')))])
     })
   }
 

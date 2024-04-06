@@ -30,7 +30,6 @@ The picker is added as the last element of the `input-dt`.
   hours="0,3,6,9,12,15,18,21"
   minutes="0,10,20,30,40,50"
   seconds="0,10,20,30,40,50"
-  format="YYYY-MM-DD"
   unit="seconds"
   locales="hi"
 >
@@ -55,9 +54,10 @@ import 'input-dt/input-dt.css'
 
 | Attribute | Description |
 | --- | --- |
-| `input-dt` | This attribute can be attached to `input[type="text"]` or `input[type="datetime-local"]`, which opens the picker when the focus is given. It also dispatches an input event each time any datetime is selected. |
+| `input-dt` | This attribute can be attached to `input[type="text"]` or `input[type="datetime-local"]`, which opens the picker when the focus is given. It also dispatches an input event each time any datetime is selected. Optionally supports formatting. Supported formats are described below. |
 | `input-dt-open` | If this attribute is given, it opens the picker when the element is clicked. |
-| `input-dt-display` | If this attribute is given, each time a datetime is selected, the element's children are overwritten with text nodes representing the datetime. |
+| `input-dt-display` | If this attribute is given, each time a datetime is selected, the element's children are overwritten with text nodes representing the datetime. Optionally supports formatting. Supported formats are described below. |
+| `input-dt-value` | When associated with an element, it updates the value of the element when a date/time is selected. Optionally supports formatting. Supported formats are described below. |
 
 ## Attributes for the `input-dt` element
 
@@ -72,11 +72,13 @@ The `input-dt` element provides several attributes. These are default values and
 | `hours` | Options for the hour. |
 | `minutes` | Options for the minute. |
 | `seconds` | Options for the second. |
-| `format` | It is possible to change the display of `input-dt` or `input-dt-display`. Supported formats are in the following table. By default, it is assumed to be formatted for the locale of the web browser. |
 | `unit` | Minimum unit of datetime. `day` - date picker only, or `hour`, `minute`, `second`(default). |
 | `locales` | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
 
 ## All supported formats
+
+input-dt, input-dt-display and input-dt-value support formatting as attribute values. See the following table.
+If you do not specify a format, it defaults to the localized format.
 
 | Format | Output | Note |
 | --- | --- | --- |
