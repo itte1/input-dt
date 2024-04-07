@@ -5,7 +5,8 @@ input-dt is a library for entering datetime. You can use it without JavaScript. 
 - A custom element
 - **Framework independent**
 - **Automatically localized**
-- Support for date periods
+- Dark mode support
+- Date periods support
 - Customizable
 
 <img width="230" alt="スクリーンショット 2024-04-07 205616" src="https://github.com/itte1/input-dt/assets/57395168/c2c0f5e0-2e56-4ee5-af73-886cfb5b6769">
@@ -27,6 +28,7 @@ Next, add the `input-dt` attribute to the `input[type="text"]`.
 The picker is added as the last element of the `input-dt`.
 
 ```html
+<label for="calender">Datetime:</label>
 <input-dt
   value="2024-03-10"
   min="2024-01-01"
@@ -37,8 +39,11 @@ The picker is added as the last element of the `input-dt`.
   seconds="0,10,20,30,40,50"
   unit="seconds"
   locales="ja"
+  first-day="0"
+  background="true"
+  auto-close="true"
 >
-  <input type="text" name="datetime" input-dt>
+  <input type="text" name="calender" input-dt>
 </input-dt>
 ```
 
@@ -95,25 +100,19 @@ If you do not specify a format, it defaults to the localized format.
 
 | Format | Output | Note |
 | --- | --- | --- |
-| `yy` | 26 | The 2-digit year |
-| `yyyy` | 2026 | The 4-digit year |
-| `YYYY` | 2026 | The full year |
-| `M` | 1 to 12 | The numeric month |
-| `MM` | 01 to 12 | The 2-digit month |
-| `D` | 1 to 31 | The numeric day of month |
-| `DD` | 01 to 31 | The 2-digit day of month |
-| `H` | 0 to 23 | The numeric hour |
-| `HH` | 00 to 23 | The 2-digit hour |
-| `m` | 0 to 59 | The numeric minute |
-| `mm` | 00 to 59 | The 2-digit minute |
-| `s` | 0 to 59 | The numeric second |
-| `ss` | 00 to 59 | The 2-digit second |
-
-# Events
-
-The `input-dt` element receives an `input` event each time a date/time is selected.
-
-At the same time, input-dt also dispatches an `input` event to input elements with `input-dt`.
+| yy | 26 | The 2-digit year |
+| yyyy | 2026 | The 4-digit year |
+| YYYY | 2026 | The full year |
+| M | 1 to 12 | The numeric month |
+| MM | 01 to 12 | The 2-digit month |
+| D | 1 to 31 | The numeric day of month |
+| DD | 01 to 31 | The 2-digit day of month |
+| H | 0 to 23 | The numeric hour |
+| HH | 00 to 23 | The 2-digit hour |
+| m | 0 to 59 | The numeric minute |
+| mm | 00 to 59 | The 2-digit minute |
+| s | 0 to 59 | The numeric second |
+| ss | 00 to 59 | The 2-digit second |
 
 # Customize Style
 
@@ -131,12 +130,17 @@ You can customize colors with CSS custom properties.
   --input-dt-disable: #777;
   --input-dt-outside: #BBB;
   --input-dt-outside-visibility: visible;
+  --input-dt-font-family: serif;
 }
 ```
+
+<img width="229" alt="image" src="https://github.com/itte1/input-dt/assets/57395168/7f876b45-6ee7-46a0-90ba-c14c08eadc32">
 
 ## CSS overwrite
 
 You can use the developer tool or other tools to find out the used class name and override it.
+
+<img width="230" alt="image" src="https://github.com/itte1/input-dt/assets/57395168/3214472b-ba24-4ac9-ba3c-8b13fc8ecca1">
 
 # Setting Properties
 
@@ -144,42 +148,42 @@ When the input-dt element is accessed via JavaScript, several properties are ava
 
 | Property | Type | Description |
 | --- | --- | --- |
-| value | Date \| null | Value selected by input-dt. |
-| min | Date \| null | Minimum selectable dates. By default, New Year's Day 120 years ago. If a null value is assigned, it is initialized to the default value. |
-| max | Date \| null | Maximum selectable dates. By default, the last day of the year after 10 years. If a null value is assigned, it is initialized to the default value. |
-| disable | Date[] | List of dates that cannot be selected. |
-| hours | number[] \| null | Options for the hour. |
-| minutes | number[] \| null | Options for the minute. |
-| seconds | number[] \| null | Options for the second. |
-| unit | string | Minimum unit of datetime. `day` - date picker only, or `hour`, `minute`, `second`(default). |
-| locales | string \| null | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
-| firstDay | number \| null | First day of week. By default, it will be the default locale of the web browser. |
-| background | boolean | See the `background` attribute. |
-| autoclose | boolean | See the `autoclose` attribute. |
-| modal | Element | **Read-only**. A property for direct access to the elements of a modal. |
-| format | (date: Date) => string | **Write-only**. It is possible to change the display of `input-dt` or `input-dt-display`. If used, the format attribute becomes invalid. |
-| formatYear | (date: number) => string | **Write-only**. It is possible to change the text portion displaying the year and the year options. |
-| formatMonth | (date: number) => string | **Write-only**. It is possible to change the text portion displaying the month and the month options. |
-| formatWeek | (value: number) => string | **Write-only**. The display text of week headings in the calendar can be changed. |
-| formatDay | (date: Date) => string | **Write-only**. The text of each day of the calendar can be changed. |
-| formatHour | (value: number) => string | **Write-only**. The text of the hour options can be changed. |
-| formatMinute | (value: number) => string | **Write-only**. The text of the minute options can be changed. |
-| formatSecond | (value: number) => string | **Write-only**. The text of the second options can be changed. |
-| renderYear | (value: number, flags: Flags) => Element | **Write-only**. The entire element of the year option can be replaced. |
-| renderMonth | (value: number, flags: Flags) => Element | **Write-only**. The entire element of the month option can be replaced. |
-| renderWeek | (value: number) => Element | **Write-only**. It is possible to change the elements of the calendar week headings in their entirety. |
-| renderDate | (date: Date, flags: Flags) => Element | **Write-only**. It is possible to change the elements of each day of the calendar in its entirety. |
-| renderHour | (value: number, flags: Flags) => Element | **Write-only**. The entire element of the hour option can be replaced. |
-| renderMinute | (value: number, flags: Flags) => Element | **Write-only**. The entire element of the minute option can be replaced. |
-| renderSecond | (value: number, flags: Flags) => Element | **Write-only**. The entire element of the second option can be replaced. |
+| `value` | Date \| null | Value selected by input-dt. |
+| `min` | Date \| null | Minimum selectable dates. By default, New Year's Day 120 years ago. If a null value is assigned, it is initialized to the default value. |
+| `max` | Date \| null | Maximum selectable dates. By default, the last day of the year after 10 years. If a null value is assigned, it is initialized to the default value. |
+| `disable` | Date[] | List of dates that cannot be selected. |
+| `hours` | number[] \| null | Options for the hour. |
+| `minutes` | number[] \| null | Options for the minute. |
+| `seconds` | number[] \| null | Options for the second. |
+| `unit` | string | Minimum unit of datetime. `day` - date picker only, or `hour`, `minute`, `second`(default). |
+| `locales` | string \| null | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
+| `firstDay` | number \| null | First day of week. By default, it will be the default locale of the web browser. |
+| `background` | boolean | See the `background` attribute. |
+| `autoclose` | boolean | See the `autoclose` attribute. |
+| `modal` | Element | **Read-only**. A property for direct access to the elements of a modal. |
+| `format` | (date: Date) => string | **Write-only**. It is possible to change the display of `input-dt` or `input-dt-display`. If used, the format attribute becomes invalid. |
+| `formatYear` | (date: number) => string | **Write-only**. It is possible to change the text portion displaying the year and the year options. |
+| `formatMonth` | (date: number) => string | **Write-only**. It is possible to change the text portion displaying the month and the month options. |
+| `formatWeek` | (value: number) => string | **Write-only**. The display text of week headings in the calendar can be changed. |
+| `formatDay` | (date: Date) => string | **Write-only**. The text of each day of the calendar can be changed. |
+| `formatHour` | (value: number) => string | **Write-only**. The text of the hour options can be changed. |
+| `formatMinute` | (value: number) => string | **Write-only**. The text of the minute options can be changed. |
+| `formatSecond` | (value: number) => string | **Write-only**. The text of the second options can be changed. |
+| `renderYear` | (value: number, flags: Flags) => Element | **Write-only**. The entire element of the year option can be replaced. |
+| `renderMonth` | (value: number, flags: Flags) => Element | **Write-only**. The entire element of the month option can be replaced. |
+| `renderWeek` | (value: number) => Element | **Write-only**. It is possible to change the elements of the calendar week headings in their entirety. |
+| `renderDate` | (date: Date, flags: Flags) => Element | **Write-only**. It is possible to change the elements of each day of the calendar in its entirety. |
+| `renderHour` | (value: number, flags: Flags) => Element | **Write-only**. The entire element of the hour option can be replaced. |
+| `renderMinute` | (value: number, flags: Flags) => Element | **Write-only**. The entire element of the minute option can be replaced. |
+| `renderSecond` | (value: number, flags: Flags) => Element | **Write-only**. The entire element of the second option can be replaced. |
 
 The Flags type has the following properties
 
 - `isSelected` - This value is the currently selected.
-- `isWeekend` - `renderDate` only. It is the weekend as determined by the current locale.
-- `isInside` - `renderDate` only. This date is inside the currently selected years and months.
-- `isOutside` - `renderDate` only. This date is outside the currently selected years and months.
-- `isDisabled` - `renderDate` only. This date has been disabled.
+- `isWeekend` - renderDate only. It is the weekend as determined by the current locale.
+- `isInside` - renderDate only. This date is inside the currently selected years and months.
+- `isOutside` - renderDate only. This date is outside the currently selected years and months.
+- `isDisabled` - renderDate only. This date has been disabled.
 
 
 These properties can be used to create new custom element as follows.
@@ -196,3 +200,9 @@ export class InputDtJa extends InputDt {
 
 window.customElements.define('input-dt-ja', InputDtJa)
 ```
+
+# Events
+
+The `input-dt` element receives an `input` event each time a date/time is selected.
+
+At the same time, input-dt also dispatches an `input` event to input elements with `input-dt`.
