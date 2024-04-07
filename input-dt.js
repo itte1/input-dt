@@ -799,7 +799,7 @@ export class InputDt extends HTMLElement {
         .forEach(selector => {
           root.querySelectorAll(selector).forEach(target => {
             let cls = globalThis.customElements.get(target.tagName.toLowerCase())
-            if (cls === InputDt && target !== this) {
+            if ((cls === InputDt || InputDt.isPrototypeOf(cls)) && target !== this) {
               targets.push(target)
             }
         })
