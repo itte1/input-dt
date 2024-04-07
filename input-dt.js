@@ -387,8 +387,12 @@ export class InputDt extends HTMLElement {
       } else {
         this.value = value
       }
-      this.open(this._year, this._monthIndex)
-      this._openTime()
+      if (this.autoclose) {
+        this.close()
+      } else {
+        this.open(this._year, this._monthIndex)
+        this._openTime()
+      }
     }
 
     let hourSelect = new TimeSelect('hour')
@@ -466,6 +470,7 @@ export class InputDt extends HTMLElement {
     this.max = null
     this.unit = 'second'
     this.background = false
+    this.autoclose = false
     this.format = date => this.formatter.format(date)
   }
   connectedCallback() {
@@ -485,7 +490,7 @@ export class InputDt extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['value', 'min', 'max', 'disable', 'hours', 'minutes', 'seconds', 'unit', 'locales', 'background']
+    return ['value', 'min', 'max', 'disable', 'hours', 'minutes', 'seconds', 'unit', 'locales', 'background', 'autoclose']
   }
 
   attributeChangedCallback(name, _, value) {
@@ -521,6 +526,7 @@ export class InputDt extends HTMLElement {
         this[name] = value
         break
       case 'background':
+      case 'autoclose':
         this[name] = Boolean(value)
         break
     }
@@ -611,6 +617,12 @@ export class InputDt extends HTMLElement {
   }
   get background() {
     return this._background
+  }
+  set autoclose(value) {
+    this._autoclose = value
+  }
+  get autoclose() {
+    return this._autoclose
   }
 
   get modal() {

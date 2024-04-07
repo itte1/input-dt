@@ -76,6 +76,7 @@ The `input-dt` element provides several attributes. These are default values and
 | `unit` | Minimum unit of datetime. `day` - date picker only, or `hour`, `minute`, `second`(default). |
 | `locales` | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
 | `background` | Normally, a modal is closed by clicking anywhere other than the modal. This is accomplished by receiving the `click` event of the `document`. Therefore, if there is an element that stops the propagation of events, the modal will not close.<br>If the `background` attribute is set to `true`, a filter that closes the modal on click will cover the entire screen. |
+| `autoclose` | If set to true, the modal will close when a date is selected in the date picker only. |
 
 ## All supported formats
 
@@ -144,6 +145,7 @@ When the input-dt element is accessed via JavaScript, several properties are ava
 | locales | string \| null | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
 | modal | Element | **Read-only**. A property for direct access to the elements of a modal. |
 | background | boolean | See the `background` attribute. |
+| autoclose | boolean | See the `autoclose` attribute. |
 | format | (date: Date) => string | **Write-only**. It is possible to change the display of `input-dt` or `input-dt-display`. If used, the format attribute becomes invalid. |
 | formatYear | (date: number) => string | **Write-only**. It is possible to change the text portion displaying the year and the year options. |
 | formatMonth | (date: number) => string | **Write-only**. It is possible to change the text portion displaying the month and the month options. |
