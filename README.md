@@ -75,6 +75,7 @@ The `input-dt` element provides several attributes. These are default values and
 | `seconds` | Options for the second. |
 | `unit` | Minimum unit of datetime. `day` - date picker only, or `hour`, `minute`, `second`(default). |
 | `locales` | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
+| `first-day` | First day of the week. An integer, between 0 and 6. By default, it will be the default locale of the web browser. However, FireFox is not supported, so the value is 0. |
 | `background` | Normally, a modal is closed by clicking anywhere other than the modal. This is accomplished by receiving the `click` event of the `document`. Therefore, if there is an element that stops the propagation of events, the modal will not close.<br>If the `background` attribute is set to `true`, a filter that closes the modal on click will cover the entire screen. |
 | `autoclose` | If set to true, the modal will close when a date is selected in the date picker only. |
 
@@ -143,9 +144,10 @@ When the input-dt element is accessed via JavaScript, several properties are ava
 | seconds | number[] \| null | Options for the second. |
 | unit | string | Minimum unit of datetime. `day` - date picker only, or `hour`, `minute`, `second`(default). |
 | locales | string \| null | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
-| modal | Element | **Read-only**. A property for direct access to the elements of a modal. |
+| firstDay | number \| null | First day of week. By default, it will be the default locale of the web browser. |
 | background | boolean | See the `background` attribute. |
 | autoclose | boolean | See the `autoclose` attribute. |
+| modal | Element | **Read-only**. A property for direct access to the elements of a modal. |
 | format | (date: Date) => string | **Write-only**. It is possible to change the display of `input-dt` or `input-dt-display`. If used, the format attribute becomes invalid. |
 | formatYear | (date: number) => string | **Write-only**. It is possible to change the text portion displaying the year and the year options. |
 | formatMonth | (date: number) => string | **Write-only**. It is possible to change the text portion displaying the month and the month options. |
@@ -165,6 +167,7 @@ When the input-dt element is accessed via JavaScript, several properties are ava
 The Flags type has the following properties
 
 - `isSelected` - This value is the currently selected.
+- `isWeekend` - `renderDate` only. It is the weekend as determined by the current locale.
 - `isInside` - `renderDate` only. This date is inside the currently selected years and months.
 - `isOutside` - `renderDate` only. This date is outside the currently selected years and months.
 - `isDisabled` - `renderDate` only. This date has been disabled.

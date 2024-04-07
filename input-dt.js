@@ -215,6 +215,13 @@ class Calender {
   }
   set locales(value) {
     this.weekFormatter = new Intl.DateTimeFormat(value || undefined, { weekday: 'short' })
+    this._locale = new Intl.Locale(value || navigator.language)
+  }
+  set firstDay(value) {
+    this._firstDay = value
+  }
+  get firstDay() {
+    return this._firstDay
   }
   set disable(value) {
     this._disable = value.map(formatDateOnly) 
@@ -223,30 +230,44 @@ class Calender {
     let children = []
     let weekChildren = []
 
+    let { firstDay, weekend } = this._locale.weekInfo || { firstDay: 7, weekend: [] }
+    firstDay = firstDay % 7
+    weekend = weekend.map(d => d % 7)
+
     let firstDate = new Date(year, monthIndex)
     let nextFirstDate = new Date(firstDate)
     nextFirstDate.setMonth(nextFirstDate.getMonth() + 1)
+  
     let endDate = new Date(nextFirstDate)
     endDate.setDate(endDate.getDate() - 1)
 
-    let startSpaceCount = firstDate.getDay()
+    let firstDateDayOfWeek = firstDate.getDay()
+    console.log('firstDateDayOfWeek:', firstDateDayOfWeek)
+    let startSpaceCount = Math.abs(firstDateDayOfWeek - ((this._firstDay !== undefined) ? this._firstDay : firstDay))
+    console.log('startSpaceCount:', startSpaceCount)
     let countOfMonth = endDate.getDate()
+    console.log('countOfMonth:', countOfMonth)
     let lastIndex = startSpaceCount + countOfMonth
+    console.log('lastIndex:', lastIndex)
     let endSpaceCount = (lastIndex > 35 ? 42 : 35) - lastIndex
+    console.log('endSpaceCount:', endSpaceCount)
     Array(lastIndex + endSpaceCount).fill().forEach((_, i) => {
       let date = new Date(firstDate)
       date.setDate(i + 1 - startSpaceCount)
+      let dayOfWeek = date.getDay()
       let dateText = formatDateOnly(date)
       let x = unitDateValue(date, 'day')
 
+      let isSelected = dateText === this._selectedDateText
+      let isWeekend = weekend.includes(dayOfWeek)
       let isInside = i < lastIndex
       let isOutside = i < startSpaceCount || i >= lastIndex
       let isDisabled = this._disable.includes(dateText) || x < this._min || x > this._max
-      let isSelected = dateText === this._selectedDateText
 
       let cell = h(
-        `cell cell-${date.getDate()} cell-${this.weekDays[date.getDay()]}`,
+        `cell cell-${date.getDate()} cell-${this.weekDays[dayOfWeek]}`,
         this.render(date, {
+          isWeekend,
           isInside,
           isOutside,
           isDisabled,
@@ -254,6 +275,9 @@ class Calender {
         })
       )
 
+      if (isWeekend) {
+        addClass(cell, 'cell-weekend')
+      }
       if (isInside) {
         addClass(cell, 'cell-inside')
       }
@@ -273,10 +297,14 @@ class Calender {
       children.push(cell)
 
       if (i < 7) {
-        weekChildren.push(h(
-          `week-cell cell-${this.weekDays[date.getDay()]}`,
-          this.renderWeek(i)
-        ))
+        let week = h(
+          `week-cell cell-${this.weekDays[dayOfWeek]}`,
+          this.renderWeek(dayOfWeek)
+        )
+        if (isWeekend) {
+          addClass(week, 'cell-weekend')
+        }
+        weekChildren.push(week)
       }
     })
     replaceChildren(this.el, [...weekChildren, ...children])
@@ -490,44 +518,49 @@ export class InputDt extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['value', 'min', 'max', 'disable', 'hours', 'minutes', 'seconds', 'unit', 'locales', 'background', 'autoclose']
+    return ['value', 'min', 'max', 'disable', 'hours', 'minutes', 'seconds', 'unit', 'locales', 'background', 'autoclose', 'first-day']
   }
 
   attributeChangedCallback(name, _, value) {
-    switch (name) {
+    let camel = name.split('-').map((w, i) => i === 0 ? w : w[0].toUpperCase() + w.slice(1)).join('')
+    console.log('camel:', camel)
+    switch (camel) {
       case 'value':
-        setTimeout(() => this[name] = value ? new Date(value) : null)
+        setTimeout(() => this[camel] = value ? new Date(value) : null)
         break;
       case 'disable':
         this.close()
         /* falls through */
       case 'min':
       case 'max': {
-        this[`_${name}Targets`].forEach(target => { target.removeEventListener('input', this[`_${name}Refresh`]) })
+        this[`_${camel}Targets`].forEach(target => { target.removeEventListener('input', this[`_${camel}Refresh`]) })
         let texts = value.split(',')
-        this[`_${name}Targets`] = this._getTargets(texts)
-        this[`_${name}s`] = [
+        this[`_${camel}Targets`] = this._getTargets(texts)
+        this[`_${camel}s`] = [
           ...texts.map(text => new Date(text)).filter(date => isDate(date)).map(date => () => date),
-          ...this[`_${name}Targets`].map(target => {
-            target.addEventListener('input', this[`_${name}Refresh`])
+          ...this[`_${camel}Targets`].map(target => {
+            target.addEventListener('input', this[`_${camel}Refresh`])
             return () => target.value
           }),
         ]
-        this[`_${name}Refresh`]()
+        this[`_${camel}Refresh`]()
         break
       }
       case 'hours':
       case 'minutes':
       case 'seconds':
-        this[name] = value ? value.split(',').map(value => Number(value)) : null
+        this[camel] = value ? value.split(',').map(value => Number(value)) : null
         break;
       case 'unit':
       case 'locales':
-        this[name] = value
+        this[camel] = value
         break
       case 'background':
       case 'autoclose':
-        this[name] = Boolean(value)
+        this[camel] = Boolean(value)
+        break
+      case 'firstDay':
+        this[camel] = Number(value)
         break
     }
   }
@@ -623,6 +656,12 @@ export class InputDt extends HTMLElement {
   }
   get autoclose() {
     return this._autoclose
+  }
+  set firstDay(value) {
+    this._calender.firstDay = value == 0 ? 0 : value ? (value % 7) : undefined
+  }
+  get firstDay() {
+    return this._calender.firstDay
   }
 
   get modal() {
