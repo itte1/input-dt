@@ -3,8 +3,13 @@
 input-dt is a library for entering datetime. You can use it without JavaScript. Easy to use with PHP
 
 - A custom element
-- Automatically localized
+- **Framework independent**
+- **Automatically localized**
+- Support for date periods
 - Customizable
+
+<img width="230" alt="スクリーンショット 2024-04-07 205616" src="https://github.com/itte1/input-dt/assets/57395168/c2c0f5e0-2e56-4ee5-af73-886cfb5b6769">
+<img width="230" alt="スクリーンショット 2024-04-07 2056582" src="https://github.com/itte1/input-dt/assets/57395168/4fbb6995-0dad-4345-b759-f32d6d0f1ef4">
 
 # Basic usage
 
@@ -31,11 +36,15 @@ The picker is added as the last element of the `input-dt`.
   minutes="0,10,20,30,40,50"
   seconds="0,10,20,30,40,50"
   unit="seconds"
-  locales="hi"
+  locales="ja"
 >
   <input type="text" name="datetime" input-dt>
 </input-dt>
 ```
+
+## More examples
+
+See [the examples directory](https://github.com/itte1/input-dt/tree/main/examples) for examples in HTML only, Bootstrap, Vue.js, React, Jito, and PHP.
 
 ## Import for Node.js
 
@@ -176,14 +185,14 @@ The Flags type has the following properties
 These properties can be used to create new custom element as follows.
 
 ```js
-import { DtPicker } from 'input-dt'
+import { InputDt } from 'input-dt'
 
-export class DtPickerJa extends DtPicker {
+export class InputDtJa extends InputDt {
   constructor() {
     super()
     this.locales = 'ja'
   }
 }
 
-window.customElements.define('input-dt-ja', DtPickerJa)
+window.customElements.define('input-dt-ja', InputDtJa)
 ```
