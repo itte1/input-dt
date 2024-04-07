@@ -630,6 +630,7 @@ export class InputDt extends HTMLElement {
   }
 
   set locales(value) {
+    this._resetFormatter(value)
     this._yearSelect.locales = value
     this._monthSelect.locales = value
     this._yearDisplay.locales = value
@@ -768,8 +769,8 @@ export class InputDt extends HTMLElement {
     }, 500)
   }
 
-  _resetFormatter() {
-    this.formatter = new Intl.DateTimeFormat(undefined, {
+  _resetFormatter(locales) {
+    this.formatter = new Intl.DateTimeFormat(locales, {
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
@@ -778,6 +779,7 @@ export class InputDt extends HTMLElement {
         ...(this._unitNumber <= unitNumber('second') ? { second: '2-digit' } : {}),
         weekday: 'short',
       })
+    this._dispatch()
   }
 
   _getFormattedValue(formatText) {
