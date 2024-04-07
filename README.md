@@ -67,15 +67,15 @@ The `input-dt` element provides several attributes. These are default values and
 | Attribute | Description |
 | --- | --- |
 | `value` | Value selected by input-dt. |
-| `min` | Minimum selectable dates. By default, New Year's Day 120 years ago. |
-| `max` | Maximum selectable dates. By default, the last day of the year after 10 years. |
-| `disable` | List of dates that cannot be selected. |
+| `min` | Minimum selectable dates. By default, New Year's Day 120 years ago.<br>A comma-separated list of dates in the format YYYY-MM-DD and a selector string identifying other `dt-picker` elements. If multiple dates are given, the most recent date will be used. |
+| `max` | Maximum selectable dates. By default, the last day of the year after 10 years.<br>A comma-separated list of dates in the format YYYY-MM-DD and a selector string identifying other `dt-picker` elements. If multiple dates are given, the earliest date will be used. |
+| `disable` | List of dates that cannot be selected.<br>A comma-separated list of dates in the format YYYY-MM-DD and a selector string identifying other `dt-picker` elements. |
 | `hours` | Options for the hour. |
 | `minutes` | Options for the minute. |
 | `seconds` | Options for the second. |
 | `unit` | Minimum unit of datetime. `day` - date picker only, or `hour`, `minute`, `second`(default). |
 | `locales` | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
-| `background` | Normally, a modal is closed by clicking anywhere other than the modal. This is accomplished by receiving the `click` event of the `document`. Therefore, if there is an element that stops the propagation of events, the modal will not close. If the `background` attribute is set to `true`, a filter that closes the modal on click will cover the entire screen. |
+| `background` | Normally, a modal is closed by clicking anywhere other than the modal. This is accomplished by receiving the `click` event of the `document`. Therefore, if there is an element that stops the propagation of events, the modal will not close.<br>If the `background` attribute is set to `true`, a filter that closes the modal on click will cover the entire screen. |
 
 ## All supported formats
 

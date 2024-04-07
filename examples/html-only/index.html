@@ -7,15 +7,45 @@
   <link rel="stylesheet" href="../../input-dt.css">
 </head>
 <body>
-  <div>
-    <label for="calender">Calender</label>
-    <label>
-      <input-dt>
-        <input type="text" input-dt>
-        <button type="button" input-dt-clear>Clear</button>
-      </input-dt>
-    </label>
-  </div>
+  <section>
+    <h2>Simple Usage</h2>
+    <div>
+      <label>
+        <input-dt>
+          <input type="text" input-dt>
+          <button type="button" input-dt-clear>Clear</button>
+        </input-dt>
+      </label>
+    </div>
+  </section>
+
+  <section>
+    <h2>Date Period</h2>
+    <div>
+      <label>
+        <input-dt
+          id="start"
+          max="#end"
+          unit="date"
+        >
+          <input type="text" input-dt>
+          <button type="button" input-dt-clear>Clear</button>
+        </input-dt>
+      </label>
+      -
+      <label>
+        <input-dt
+          id="end"
+          min="#start"
+          unit="date"
+        >
+          <input type="text" input-dt>
+          <button type="button" input-dt-clear>Clear</button>
+        </input-dt>
+      </label>
+    </div>
+  </section>
+
   <script type="module" src="../../input-dt.js"></script>
 </body>
 </html>

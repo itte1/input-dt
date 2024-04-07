@@ -57,6 +57,10 @@ function pad2(value) {
   return (value + '').padStart(2, '0')
 }
 
+function isDate(date) {
+  return date instanceof Date && !Number.isNaN(date.getTime())
+}
+
 function format(date, format = 'YYYY-MM-DDTHH:mm:ss') {
   if (date) {
     return format.replace(/y{1,5}|Y{4}|M{1,2}|D{1,2}|H{1,2}|m{1,2}|s{1,2}/g, m => {
@@ -344,6 +348,11 @@ export class InputDt extends HTMLElement {
     this.open = this.open.bind(this)
     this.close = this.close.bind(this)
     this.clear = this.clear.bind(this)
+    ;['min', 'max', 'disable'].forEach(name => {
+      this[`_${name}Refresh`] = this[`_${name}Refresh`].bind(this)
+      this[`_${name}s`] = []
+      this[`_${name}Targets`] = []
+    })
 
     let yearSelect = new YearSelect()
     yearSelect.onSelect = value => {
@@ -470,36 +479,49 @@ export class InputDt extends HTMLElement {
     document.removeEventListener('click', this.close)
     this._detach()
     this._modal.remove()
+    ['min', 'max', 'disable'].forEach(name => {
+      this[`_${name}Targets`].forEach(target => { target.removeEventListener('input', this[`_${name}Refresh`]) })
+    })
   }
 
   static get observedAttributes() {
     return ['value', 'min', 'max', 'disable', 'hours', 'minutes', 'seconds', 'unit', 'locales', 'background']
   }
 
-  attributeChangedCallback(name, _oldValue, newValue) {
+  attributeChangedCallback(name, _, value) {
     switch (name) {
       case 'value':
-        setTimeout(() => this[name] = newValue ? new Date(newValue) : null)
-        break;
-      case 'min':
-      case 'max':
-        this[name] = newValue ? new Date(newValue) : null
+        setTimeout(() => this[name] = value ? new Date(value) : null)
         break;
       case 'disable':
-        this.disable = newValue ? newValue.split(',').map(v => new Date(v)) : null
         this.close()
-        break;
+        /* falls through */
+      case 'min':
+      case 'max': {
+        this[`_${name}Targets`].forEach(target => { target.removeEventListener('input', this[`_${name}Refresh`]) })
+        let texts = value.split(',')
+        this[`_${name}Targets`] = this._getTargets(texts)
+        this[`_${name}s`] = [
+          ...texts.map(text => new Date(text)).filter(date => isDate(date)).map(date => () => date),
+          ...this[`_${name}Targets`].map(target => {
+            target.addEventListener('input', this[`_${name}Refresh`])
+            return () => target.value
+          }),
+        ]
+        this[`_${name}Refresh`]()
+        break
+      }
       case 'hours':
       case 'minutes':
       case 'seconds':
-        this[name] = newValue ? newValue.split(',').map(value => Number(value)) : null
+        this[name] = value ? value.split(',').map(value => Number(value)) : null
         break;
       case 'unit':
       case 'locales':
-        this[name] = newValue
+        this[name] = value
         break
       case 'background':
-        this[name] = Boolean(newValue)
+        this[name] = Boolean(value)
         break
     }
   }
@@ -719,6 +741,37 @@ export class InputDt extends HTMLElement {
     } else {
       return ''
     }
+  }
+
+  _getTargets(selectors) {
+    let root = this.getRootNode()
+    if (root) {
+      let targets = []
+      selectors
+        .filter(selector => !isDate(new Date(selector)))
+        .forEach(selector => {
+          root.querySelectorAll(selector).forEach(target => {
+            let cls = globalThis.customElements.get(target.tagName.toLowerCase())
+            if (cls === InputDt && target !== this) {
+              targets.push(target)
+            }
+        })
+      })
+      return targets
+    } else {
+      return []
+    }
+  }
+  _minRefresh() {
+    let dates = this._mins.map(f => f()).filter(d => isDate(d))
+    this.min =  dates.length ? new Date(Math.max(...dates)) : null
+  }
+  _maxRefresh() {
+    let dates = this._maxs.map(f => f()).filter(d => isDate(d))
+    this.max =  dates.length ? new Date(Math.min(...dates)) : null
+  }
+  _disableRefresh() {
+    this.disable = this._disables.map(f => f()).filter(d => isDate(d))
   }
 
   _active(name) {
