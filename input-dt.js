@@ -242,15 +242,10 @@ class Calender {
     endDate.setDate(endDate.getDate() - 1)
 
     let firstDateDayOfWeek = firstDate.getDay()
-    console.log('firstDateDayOfWeek:', firstDateDayOfWeek)
     let startSpaceCount = Math.abs(firstDateDayOfWeek - ((this._firstDay !== undefined) ? this._firstDay : firstDay))
-    console.log('startSpaceCount:', startSpaceCount)
     let countOfMonth = endDate.getDate()
-    console.log('countOfMonth:', countOfMonth)
     let lastIndex = startSpaceCount + countOfMonth
-    console.log('lastIndex:', lastIndex)
     let endSpaceCount = (lastIndex > 35 ? 42 : 35) - lastIndex
-    console.log('endSpaceCount:', endSpaceCount)
     Array(lastIndex + endSpaceCount).fill().forEach((_, i) => {
       let date = new Date(firstDate)
       date.setDate(i + 1 - startSpaceCount)
@@ -523,7 +518,6 @@ export class InputDt extends HTMLElement {
 
   attributeChangedCallback(name, _, value) {
     let camel = name.split('-').map((w, i) => i === 0 ? w : w[0].toUpperCase() + w.slice(1)).join('')
-    console.log('camel:', camel)
     switch (camel) {
       case 'value':
         setTimeout(() => this[camel] = value ? new Date(value) : null)
