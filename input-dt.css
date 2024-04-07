@@ -6,6 +6,16 @@
   --input-dt-disable: #BBB;
   --input-dt-outside: #888;
   --input-dt-outside-visibility: hidden;
+  --input-dt-font-family: sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  .input-dt {
+  --input-dt-color: #fff;
+  --input-dt-background: #323232;
+  --input-dt-highlight: #9bf;
+  --input-dt-disable: #777;
+  --input-dt-outside: #bbb;
+  }
 }
 .input-dt_modal {
   position: absolute;
@@ -49,7 +59,7 @@
   cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
-  font-family: sans-serif;
+  font-family: var(--input-dt-font-family);
   white-space: nowrap;
 }
 .input-dt_prev,
@@ -65,8 +75,8 @@
   content: '';
   display: block;
   border: .08em solid var(--input-dt-color);
-  border-right-color: transparent;
-  border-top-color: transparent;
+  border-right-width:0; 
+  border-top-width: 0;
   width: .6em;
   height: .6em;
 }
@@ -91,8 +101,11 @@
   text-align: center;
   -webkit-user-select: none;
   user-select: none;
-  font-family: sans-serif;
+  font-family: var(--input-dt-font-family);
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .input-dt_cell {
   border: 1px solid transparent;
@@ -102,8 +115,11 @@
   box-sizing: border-box;
   -webkit-user-select: none;
   user-select: none;
-  font-family: sans-serif;
+  font-family: var(--input-dt-font-family);
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .input-dt_cell:not(.input-dt_cell-disabled):hover {
   border-color: var(--input-dt-highlight);
@@ -151,7 +167,7 @@
   line-height: 2em;
   -webkit-user-select: none;
   user-select: none;
-  font-family: sans-serif;
+  font-family: var(--input-dt-font-family);
   white-space: nowrap;
 }
 .input-dt_select-hour::before {
@@ -171,7 +187,7 @@
   box-sizing: border-box;
   -webkit-user-select: none;
   user-select: none;
-  font-family: sans-serif;
+  font-family: var(--input-dt-font-family);
   white-space: nowrap;
   cursor: pointer;
 }
