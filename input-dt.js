@@ -415,7 +415,7 @@ export class InputDt extends HTMLElement {
       } else {
         this.value = value
       }
-      if (this.autoclose) {
+      if (this.autoClose) {
         this.close()
       } else {
         this.open(this._year, this._monthIndex)
@@ -498,7 +498,7 @@ export class InputDt extends HTMLElement {
     this.max = null
     this.unit = 'second'
     this.background = false
-    this.autoclose = false
+    this.autoClose = false
     this.format = date => this.formatter.format(date)
   }
   connectedCallback() {
@@ -518,7 +518,7 @@ export class InputDt extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['value', 'min', 'max', 'disable', 'hours', 'minutes', 'seconds', 'unit', 'locales', 'background', 'autoclose', 'first-day']
+    return ['value', 'min', 'max', 'disable', 'hours', 'minutes', 'seconds', 'unit', 'locales', 'background', 'auto-close', 'first-day']
   }
 
   attributeChangedCallback(name, _, value) {
@@ -556,7 +556,7 @@ export class InputDt extends HTMLElement {
         this[camel] = value
         break
       case 'background':
-      case 'autoclose':
+      case 'autoClose':
         this[camel] = Boolean(value)
         break
       case 'firstDay':
@@ -651,11 +651,11 @@ export class InputDt extends HTMLElement {
   get background() {
     return this._background
   }
-  set autoclose(value) {
-    this._autoclose = value
+  set autoClose(value) {
+    this._autoClose = value
   }
-  get autoclose() {
-    return this._autoclose
+  get autoClose() {
+    return this._autoClose
   }
   set firstDay(value) {
     this._calender.firstDay = value == 0 ? 0 : value ? (value % 7) : undefined
