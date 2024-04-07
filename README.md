@@ -1,6 +1,6 @@
 # input-dt
 
-input-dt is a library for entering datetime. You can use it without JavaScript. Easy to use with PHP
+input-dt is a library for datetime input. You can use it without JavaScript. Easy to use with PHP.
 
 - A custom element
 - **Framework independent**
@@ -14,14 +14,14 @@ input-dt is a library for entering datetime. You can use it without JavaScript. 
 
 # Basic usage
 
-Import js and css files in advance. This is an example of importing from a CDN.
+Import js and css files beforehand. This is an example of importing from a CDN.
 
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/input-dt@0.0.5/input-dt-min.css">
 <script type="module" src="https://cdn.jsdelivr.net/npm/input-dt@0.0.5/input-dt-min.js"></script>
 ```
 
-To begin, write an `input[type="text"]` tag and enclose it in a `input-dt` tag.  You can optionally add attributes to the `input-dt` tag.
+To start, write an `input[type="text"]` tag and enclose it in an `input-dt` tag.  You can optionally add attributes to the `input-dt` tag.
 
 Next, add the `input-dt` attribute to the `input[type="text"]`.
 
@@ -68,11 +68,11 @@ import 'input-dt/input-dt.css'
 
 | Attribute | Description |
 | --- | --- |
-| `input-dt` | This attribute can be attached to `input[type="text"]` or `input[type="datetime-local"]`, which opens the picker when the focus is given. It also dispatches an input event each time any datetime is selected. Optionally supports formatting. Supported formats are described below. |
-| `input-dt-open` | If this attribute is given, it opens the picker when the element is clicked. |
-| `input-dt-clear` | When this attribute is given, clicking on the element clears the date/time value. |
-| `input-dt-display` | If this attribute is given, each time a datetime is selected, the element's children are overwritten with text nodes representing the datetime. Optionally supports formatting. Supported formats are described below. |
-| `input-dt-value` | When associated with an element, it updates the value of the element when a date/time is selected. Optionally supports formatting. Supported formats are described below. |
+| `input-dt` | This attribute can be attached to `input[type="text"]` or `input[type="datetime-local"]`, which opens the picker when the focus is set. It will also fire an input event whenever any datetime is selected. Optionally supports formatting. The supported formats are described below. |
+| `input-dt-open` | If this attribute is specified, the picker will be opened when the element is clicked. |
+| `input-dt-clear` | If this attribute is specified, clicking on the element will clear the date/time value. |
+| `input-dt-display` | If this attribute is specified, each time a datetime is selected, the element's children are overwritten with text nodes representing the datetime. Optionally supports formatting. The supported formats are described below. |
+| `input-dt-value` | When associated with an element, it updates the value of the element when a date/time is selected. Optionally supports formatting. The supported formats are described below. |
 
 ## Attributes for the `input-dt` element
 
@@ -81,17 +81,17 @@ The `input-dt` element provides several attributes. These are default values and
 | Attribute | Description |
 | --- | --- |
 | `value` | Value selected by input-dt. |
-| `min` | Minimum selectable dates. By default, New Year's Day 120 years ago.<br>A comma-separated list of dates in the format YYYY-MM-DD and a selector string identifying other `dt-picker` elements. If multiple dates are given, the most recent date will be used. |
-| `max` | Maximum selectable dates. By default, the last day of the year after 10 years.<br>A comma-separated list of dates in the format YYYY-MM-DD and a selector string identifying other `dt-picker` elements. If multiple dates are given, the earliest date will be used. |
+| `min` | Minimum number of selectable dates. By default, New Year's Day 120 years ago.<br>A comma-separated list of dates in the format YYYY-MM-DD and a selector string identifying other `dt-picker` elements. If multiple dates are given, the most recent date is used. |
+| `max` | Maximum selectable dates. By default, the last day of the year after 10 years.<br>A comma-separated list of dates in the format YYYY-MM-DD and a selector string identifying other `dt-picker` elements. If multiple dates are given, the earliest date is used. |
 | `disable` | List of dates that cannot be selected.<br>A comma-separated list of dates in the format YYYY-MM-DD and a selector string identifying other `dt-picker` elements. |
 | `hours` | Options for the hour. |
 | `minutes` | Options for the minute. |
 | `seconds` | Options for the second. |
 | `unit` | Minimum unit of datetime. `day` - date picker only, or `hour`, `minute`, `second`(default). |
 | `locales` | A locale identifier used for all parts of the modal. By default, it will be the default locale of the web browser. |
-| `first-day` | First day of the week. An integer, between 0 and 6. By default, it will be the default locale of the web browser. However, FireFox is not supported, so the value is 0. |
-| `background` | Normally, a modal is closed by clicking anywhere other than the modal. This is accomplished by receiving the `click` event of the `document`. Therefore, if there is an element that stops the propagation of events, the modal will not close.<br>If the `background` attribute is set to `true`, a filter that closes the modal on click will cover the entire screen. |
-| `autoclose` | If set to true, the modal will close when a date is selected in the date picker only. |
+| `first-day` | First day of the week. An integer, between 0 and 6. By default, this is the default locale of the web browser. However, FireFox is not supported, so the value is 0. |
+| `background` | Normally, a modal is closed by clicking somewhere other than the modal. This is done by receiving the `click` event of the `document`. Therefore, if there is an element that stops the propagation of events, the modal will not close.<br>If the `background` attribute is set to `true`, a filter that closes the modal on click will cover the entire screen. |
+| `autoclose` | If set to true, the modal will only close when a date is selected in the date picker only. |
 
 ## All supported formats
 
@@ -116,11 +116,11 @@ If you do not specify a format, it defaults to the localized format.
 
 # Customize Style
 
-You can change the style easily.
+You can easily change the style.
 
 ## Simple Customize
 
-You can customize colors with CSS custom properties.
+You can customise colours using CSS custom properties.
 
 ```css
 .input-dt {
@@ -186,7 +186,7 @@ The Flags type has the following properties
 - `isDisabled` - renderDate only. This date has been disabled.
 
 
-These properties can be used to create new custom element as follows.
+These properties can be used to create a new custom element as follows.
 
 ```js
 import { InputDt } from 'input-dt'
@@ -205,4 +205,4 @@ window.customElements.define('input-dt-ja', InputDtJa)
 
 The `input-dt` element receives an `input` event each time a date/time is selected.
 
-At the same time, input-dt also dispatches an `input` event to input elements with `input-dt`.
+At the same time, input-dt also sends an `input` event to input elements with `input-dt`.
