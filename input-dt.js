@@ -507,7 +507,7 @@ export class InputDt extends HTMLElement {
     document.removeEventListener('click', this.close)
     this._detach()
     this._modal.remove()
-    ['min', 'max', 'disable'].forEach(name => {
+    ;['min', 'max', 'disable'].forEach(name => {
       this[`_${name}Targets`].forEach(target => { target.removeEventListener('input', this[`_${name}Refresh`]) })
     })
   }
