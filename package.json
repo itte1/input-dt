@@ -1,6 +1,6 @@
 {
   "name": "input-dt",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "input-dt is a JavaScript library for entering datetime.",
   "keywords": [
     "custom element",
