@@ -18,8 +18,7 @@
   }
 }
 .input-dt_modal {
-  position: absolute;
-  left: 0;
+  position: fixed;
   z-index: calc(infinity);
 }
 .input-dt_background {
