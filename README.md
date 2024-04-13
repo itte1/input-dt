@@ -17,8 +17,8 @@ input-dt is a library for datetime input. You can use it without JavaScript. Eas
 Import js and css files beforehand. This is an example of importing from a CDN.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/input-dt@0.1.0/input-dt-min.css">
-<script type="module" src="https://cdn.jsdelivr.net/npm/input-dt@0.1.0/input-dt-min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/input-dt@0.1.2/input-dt-min.css">
+<script type="module" src="https://cdn.jsdelivr.net/npm/input-dt@0.1.2/input-dt-min.js"></script>
 ```
 
 To start, write an `input[type="text"]` tag and enclose it in an `input-dt` tag.  You can optionally add attributes to the `input-dt` tag.
