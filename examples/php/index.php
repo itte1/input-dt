@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/input-dt@0.1.0/input-dt-min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/input-dt@0.1.2/input-dt-min.css">
 </head>
 <body>
   <div>
@@ -19,6 +19,6 @@
       <button type="submit">送信</button>
     </form>
   </div>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/input-dt@0.1.0/input-dt-min.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/input-dt@0.1.2/input-dt-min.js"></script>
 </body>
 </html>
