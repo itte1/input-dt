@@ -39,7 +39,7 @@
     "@vitejs/plugin-vue": "^5.0.4",
     "bootstrap": "^5.3.3",
     "csso-cli": "^4.0.2",
-    "input-dt": "^0.0.5",
+    "input-dt": "^0.1.2",
     "jito": "^1.4.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
