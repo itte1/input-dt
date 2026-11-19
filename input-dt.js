@@ -763,7 +763,9 @@ export class InputDt extends HTMLElement {
   _updatePosition() {
     if (getComputedStyle(this._modal).position !== 'fixed') return
     let rect = this.getBoundingClientRect()
-    this._modal.style.left = `${rect.left}px`
+    let box = this._modal.querySelector(`.${prefix}box.${prefix}active`)
+    let width = box ? box.getBoundingClientRect().width : 0
+    this._modal.style.left = `${Math.min(rect.left, document.documentElement.clientWidth - width - 3)}px`
     this._modal.style.top = `${rect.bottom}px`
   }
 
@@ -798,6 +800,7 @@ export class InputDt extends HTMLElement {
       }
       this._inactive('box-date')
       this._active('box-time')
+      this._updatePosition()
     }
   }
 
