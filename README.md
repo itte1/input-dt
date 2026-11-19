@@ -49,7 +49,7 @@ The picker is added as the last element of the `input-dt`.
 
 ## More examples
 
-See [the examples directory](https://github.com/itte1/input-dt/tree/main/examples) for examples in HTML only, Bootstrap, Vue.js, React, Jito, and PHP.
+See [the examples directory](https://github.com/itte1/input-dt/tree/main/examples) for examples in HTML only, Bootstrap, Vue.js, React, Lit, Jito, and PHP.
 
 ## Import for Node.js
 
