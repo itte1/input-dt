@@ -371,6 +371,7 @@ export class InputDt extends HTMLElement {
     this.open = this.open.bind(this)
     this.close = this.close.bind(this)
     this.clear = this.clear.bind(this)
+    this._clearFromInput = () => this._setValue(null, true)
     ;['min', 'max', 'disable'].forEach(name => {
       this[`_${name}Refresh`] = this[`_${name}Refresh`].bind(this)
       this[`_${name}s`] = []
@@ -406,9 +407,9 @@ export class InputDt extends HTMLElement {
     let calender = new Calender()
     calender.onSelect = value => {
       if (this.value) {
-        this.value = new Date(value.getFullYear(), value.getMonth(), value.getDate(), this.value.getHours(), this.value.getMinutes(), this.value.getSeconds())
+        this._setValue(new Date(value.getFullYear(), value.getMonth(), value.getDate(), this.value.getHours(), this.value.getMinutes(), this.value.getSeconds()), true)
       } else {
-        this.value = value
+        this._setValue(value, true)
       }
       if (this.autoClose) {
         this.close()
@@ -422,21 +423,21 @@ export class InputDt extends HTMLElement {
     hourSelect.onSelect = value => {
       let date = new Date(this.value)
       date.setHours(value)
-      this.value = date
+      this._setValue(date, true)
     }
 
     let minuteSelect = new TimeSelect('minute')
     minuteSelect.onSelect = value => {
       let date = new Date(this.value)
       date.setMinutes(value)
-      this.value = date
+      this._setValue(date, true)
     }
 
     let secondSelect = new TimeSelect('second')
     secondSelect.onSelect = value => {
       let date = new Date(this.value)
       date.setSeconds(value)
-      this.value = date
+      this._setValue(date, true)
     }
 
     this._yearSelect = yearSelect
@@ -508,7 +509,7 @@ export class InputDt extends HTMLElement {
     this._detach()
     this._modal.remove()
     ;['min', 'max', 'disable'].forEach(name => {
-      this[`_${name}Targets`].forEach(target => { target.removeEventListener('input', this[`_${name}Refresh`]) })
+      this[`_${name}Targets`].forEach(target => { target.removeEventListener('input-dt-value-change', this[`_${name}Refresh`]) })
     })
   }
 
@@ -516,7 +517,8 @@ export class InputDt extends HTMLElement {
     return ['value', 'min', 'max', 'disable', 'hours', 'minutes', 'seconds', 'unit', 'locales', 'background', 'auto-close', 'first-day']
   }
 
-  attributeChangedCallback(name, _, value) {
+  attributeChangedCallback(name, oldValue, value) {
+    if (oldValue === value) return
     let camel = name.split('-').map((w, i) => i === 0 ? w : w[0].toUpperCase() + w.slice(1)).join('')
     switch (camel) {
       case 'value':
@@ -527,13 +529,13 @@ export class InputDt extends HTMLElement {
         /* falls through */
       case 'min':
       case 'max': {
-        this[`_${camel}Targets`].forEach(target => { target.removeEventListener('input', this[`_${camel}Refresh`]) })
+        this[`_${camel}Targets`].forEach(target => { target.removeEventListener('input-dt-value-change', this[`_${camel}Refresh`]) })
         let texts = value.split(',')
         this[`_${camel}Targets`] = this._getTargets(texts)
         this[`_${camel}s`] = [
           ...texts.map(text => new Date(text)).filter(date => isDate(date)).map(date => () => date),
           ...this[`_${camel}Targets`].map(target => {
-            target.addEventListener('input', this[`_${camel}Refresh`])
+            target.addEventListener('input-dt-value-change', this[`_${camel}Refresh`])
             return () => target.value
           }),
         ]
@@ -560,12 +562,24 @@ export class InputDt extends HTMLElement {
   }
 
   set value(date) {
+    this._setValue(date)
+  }
+  _setValue(date, notify = false) {
+    let time = date ? date.getTime() : null
+    let changed = time !== (this._valueTime ?? null)
     this._date = date
-    this._calender.date = date
-    this._hourSelect.date = date
-    this._minuteSelect.date = date
-    this._secondSelect.date = date
-    this._dispatch()
+    this._valueTime = time
+    if (changed) {
+      this._calender.date = date
+      this._hourSelect.date = date
+      this._minuteSelect.date = date
+      this._secondSelect.date = date
+    }
+    this._refreshDisplay()
+    if (changed) {
+      this.dispatchEvent(new Event('input-dt-value-change'))
+      if (notify) this._dispatch()
+    }
   }
   get value() {
     return this._date
@@ -779,7 +793,7 @@ export class InputDt extends HTMLElement {
         ...(this._unitNumber <= unitNumber('second') ? { second: '2-digit' } : {}),
         weekday: 'short',
       })
-    this._dispatch()
+    this._refreshDisplay()
   }
 
   _getFormattedValue(formatText) {
@@ -838,10 +852,17 @@ export class InputDt extends HTMLElement {
 
   _dispatch() {
     this.dispatchEvent(new Event('input'))
+    this.querySelectorAll('[input-dt], [input-dt-value]').forEach(el => {
+      el.dispatchEvent(new InputEvent('input'))
+    })
+  }
+
+  _refreshDisplay() {
     ;['input-dt', 'input-dt-value'].forEach(attr => {
       this.querySelectorAll(`[${attr}]`).forEach(el => {
         let formatText = el.getAttribute(attr)
         switch (el.type) {
+          case 'hidden':
           case 'text':
             el.value = this._getFormattedValue(formatText)
             break
@@ -849,7 +870,6 @@ export class InputDt extends HTMLElement {
             el.value = this._getFormattedValue(formatText) || null
             break
         }
-        el.dispatchEvent(new InputEvent('input'))
       })
     })
     this.querySelectorAll('[input-dt-display]').forEach(el => {
@@ -865,7 +885,7 @@ export class InputDt extends HTMLElement {
       el.addEventListener('click', this.open)
     })
     this.querySelectorAll('[input-dt-clear]').forEach(el => {
-      el.addEventListener('click', this.clear)
+      el.addEventListener('click', this._clearFromInput)
     })
   }
   _detach() {
@@ -876,7 +896,7 @@ export class InputDt extends HTMLElement {
       el.removeEventListener('click', this.open)
     })
     this.querySelectorAll('[input-dt-clear]').forEach(el => {
-      el.removeEventListener('click', this.clear)
+      el.removeEventListener('click', this._clearFromInput)
     })
   }
 }
