@@ -763,10 +763,26 @@ export class InputDt extends HTMLElement {
   _updatePosition() {
     if (getComputedStyle(this._modal).position !== 'fixed') return
     let rect = this.getBoundingClientRect()
+    if (!this._positionOrigin) {
+      let modalRect = this._modal.getBoundingClientRect()
+      this._positionOrigin = {
+        left: this._modal.style.left,
+        top: this._modal.style.top,
+        offsetLeft: modalRect.left - rect.left,
+        offsetTop: modalRect.top - rect.top,
+      }
+    }
+    this._modal.style.left = '0px'
+    this._modal.style.top = '0px'
+    let modalRect = this._modal.getBoundingClientRect()
+    let left = rect.left + this._positionOrigin.offsetLeft - modalRect.left
+    let top = rect.top + this._positionOrigin.offsetTop - modalRect.top
     let box = this._modal.querySelector(`.${prefix}box.${prefix}active`)
-    let width = box ? box.getBoundingClientRect().width : 0
-    this._modal.style.left = `${Math.min(rect.left, document.documentElement.clientWidth - width - 3)}px`
-    this._modal.style.top = `${rect.bottom}px`
+    if (box) {
+      left = Math.min(left, document.documentElement.clientWidth - box.getBoundingClientRect().right - 3)
+    }
+    this._modal.style.left = `${left}px`
+    this._modal.style.top = `${top}px`
   }
 
   _stopPositionTracking() {
@@ -775,6 +791,11 @@ export class InputDt extends HTMLElement {
     if (this._positionFrame !== null) {
       cancelAnimationFrame(this._positionFrame)
       this._positionFrame = null
+    }
+    if (this._positionOrigin) {
+      this._modal.style.left = this._positionOrigin.left
+      this._modal.style.top = this._positionOrigin.top
+      this._positionOrigin = null
     }
   }
 
