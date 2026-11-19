@@ -762,29 +762,36 @@ export class InputDt extends HTMLElement {
 
   _updatePosition() {
     if (getComputedStyle(this._modal).position !== 'fixed') return
+    let box = this._modal.querySelector(`.${prefix}box.${prefix}active`)
+    if (!box) return
     let rect = this.getBoundingClientRect()
+    if (this._positionOrigin && this._positionOrigin.box !== box) {
+      this._positionOrigin.box.style.left = this._positionOrigin.left
+      this._positionOrigin.box.style.top = this._positionOrigin.top
+      this._positionOrigin = null
+    }
     if (!this._positionOrigin) {
-      let modalRect = this._modal.getBoundingClientRect()
+      let position = this._modal.style.position
+      this._modal.style.position = 'absolute'
+      let boxRect = box.getBoundingClientRect()
+      this._modal.style.position = position
       this._positionOrigin = {
-        left: this._modal.style.left,
-        top: this._modal.style.top,
-        offsetLeft: modalRect.left - rect.left,
-        offsetTop: modalRect.top - rect.top,
+        box,
+        left: box.style.left,
+        top: box.style.top,
+        offsetLeft: boxRect.left - rect.left,
+        offsetTop: boxRect.top - rect.top,
       }
     }
-    this._modal.style.left = '0px'
-    this._modal.style.top = '0px'
-    let modalRect = this._modal.getBoundingClientRect()
-    let left = rect.left + this._positionOrigin.offsetLeft - modalRect.left
-    let top = rect.top + this._positionOrigin.offsetTop - modalRect.top
-    let box = this._modal.querySelector(`.${prefix}box.${prefix}active`)
-    if (box) {
-      let boxRect = box.getBoundingClientRect()
-      left = Math.min(left, document.documentElement.clientWidth - boxRect.right - 3)
-      top = Math.min(top, document.documentElement.clientHeight - boxRect.bottom - 3)
-    }
-    this._modal.style.left = `${left}px`
-    this._modal.style.top = `${top}px`
+    box.style.left = '0px'
+    box.style.top = '0px'
+    let boxRect = box.getBoundingClientRect()
+    let left = rect.left + this._positionOrigin.offsetLeft - boxRect.left
+    let top = rect.top + this._positionOrigin.offsetTop - boxRect.top
+    left = Math.min(left, document.documentElement.clientWidth - boxRect.right - 3)
+    top = Math.min(top, document.documentElement.clientHeight - boxRect.bottom - 3)
+    box.style.left = `${left}px`
+    box.style.top = `${top}px`
   }
 
   _stopPositionTracking() {
@@ -795,8 +802,8 @@ export class InputDt extends HTMLElement {
       this._positionFrame = null
     }
     if (this._positionOrigin) {
-      this._modal.style.left = this._positionOrigin.left
-      this._modal.style.top = this._positionOrigin.top
+      this._positionOrigin.box.style.left = this._positionOrigin.left
+      this._positionOrigin.box.style.top = this._positionOrigin.top
       this._positionOrigin = null
     }
   }
