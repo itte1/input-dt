@@ -371,6 +371,14 @@ export class InputDt extends HTMLElement {
     this.open = this.open.bind(this)
     this.close = this.close.bind(this)
     this.clear = this.clear.bind(this)
+    this._positionFrame = null
+    this._schedulePosition = () => {
+      if (this._positionFrame !== null) return
+      this._positionFrame = requestAnimationFrame(() => {
+        this._positionFrame = null
+        this._updatePosition()
+      })
+    }
     this._clearFromInput = () => this._setValue(null, true)
     ;['min', 'max', 'disable'].forEach(name => {
       this[`_${name}Refresh`] = this[`_${name}Refresh`].bind(this)
@@ -506,6 +514,7 @@ export class InputDt extends HTMLElement {
 
   disconnectedCallback() {
     document.removeEventListener('click', this.close)
+    this._stopPositionTracking()
     this._detach()
     this._modal.remove()
     ;['min', 'max', 'disable'].forEach(name => {
@@ -737,6 +746,9 @@ export class InputDt extends HTMLElement {
     if (this.background) {
       this._active('background')
     }
+    this._updatePosition()
+    window.addEventListener('scroll', this._schedulePosition, { capture: true })
+    window.addEventListener('resize', this._schedulePosition)
     this._stopClose()
   }
 
@@ -744,6 +756,48 @@ export class InputDt extends HTMLElement {
     if (!this._isStopClose) {
       this._inactive('modal') 
       this._inactive('background')
+      this._stopPositionTracking()
+    }
+  }
+
+  _updatePosition() {
+    if (getComputedStyle(this._modal).position !== 'fixed') return
+    let rect = this.getBoundingClientRect()
+    if (!this._positionOrigin) {
+      let modalRect = this._modal.getBoundingClientRect()
+      this._positionOrigin = {
+        left: this._modal.style.left,
+        top: this._modal.style.top,
+        offsetLeft: modalRect.left - rect.left,
+        offsetTop: modalRect.top - rect.top,
+      }
+    }
+    this._modal.style.left = '0px'
+    this._modal.style.top = '0px'
+    let modalRect = this._modal.getBoundingClientRect()
+    let left = rect.left + this._positionOrigin.offsetLeft - modalRect.left
+    let top = rect.top + this._positionOrigin.offsetTop - modalRect.top
+    let box = this._modal.querySelector(`.${prefix}box.${prefix}active`)
+    if (box) {
+      let boxRect = box.getBoundingClientRect()
+      left = Math.min(left, document.documentElement.clientWidth - boxRect.right - 3)
+      top = Math.min(top, document.documentElement.clientHeight - boxRect.bottom - 3)
+    }
+    this._modal.style.left = `${left}px`
+    this._modal.style.top = `${top}px`
+  }
+
+  _stopPositionTracking() {
+    window.removeEventListener('scroll', this._schedulePosition, { capture: true })
+    window.removeEventListener('resize', this._schedulePosition)
+    if (this._positionFrame !== null) {
+      cancelAnimationFrame(this._positionFrame)
+      this._positionFrame = null
+    }
+    if (this._positionOrigin) {
+      this._modal.style.left = this._positionOrigin.left
+      this._modal.style.top = this._positionOrigin.top
+      this._positionOrigin = null
     }
   }
 
@@ -769,6 +823,7 @@ export class InputDt extends HTMLElement {
       }
       this._inactive('box-date')
       this._active('box-time')
+      this._updatePosition()
     }
   }
 
