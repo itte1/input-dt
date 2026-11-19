@@ -764,7 +764,10 @@ export class InputDt extends HTMLElement {
     if (getComputedStyle(this._modal).position !== 'fixed') return
     let rect = this.getBoundingClientRect()
     if (!this._positionOrigin) {
+      let position = this._modal.style.position
+      this._modal.style.position = 'absolute'
       let modalRect = this._modal.getBoundingClientRect()
+      this._modal.style.position = position
       this._positionOrigin = {
         left: this._modal.style.left,
         top: this._modal.style.top,
