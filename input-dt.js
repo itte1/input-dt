@@ -779,7 +779,9 @@ export class InputDt extends HTMLElement {
     let top = rect.top + this._positionOrigin.offsetTop - modalRect.top
     let box = this._modal.querySelector(`.${prefix}box.${prefix}active`)
     if (box) {
-      left = Math.min(left, document.documentElement.clientWidth - box.getBoundingClientRect().right - 3)
+      let boxRect = box.getBoundingClientRect()
+      left = Math.min(left, document.documentElement.clientWidth - boxRect.right - 3)
+      top = Math.min(top, document.documentElement.clientHeight - boxRect.bottom - 3)
     }
     this._modal.style.left = `${left}px`
     this._modal.style.top = `${top}px`
