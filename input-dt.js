@@ -862,6 +862,7 @@ export class InputDt extends HTMLElement {
       this.querySelectorAll(`[${attr}]`).forEach(el => {
         let formatText = el.getAttribute(attr)
         switch (el.type) {
+          case 'hidden':
           case 'text':
             el.value = this._getFormattedValue(formatText)
             break
